@@ -3,8 +3,9 @@
 #define _VECTEUR03_HPP_
 
 // Entetes //---------------------------------------------------------------------------------------
-#include <complexe.hpp>
+#include "complexe.hpp"
 #include <stdexcept>
+#include <algorithm>
 
 // Classe  V e c t e u r //-------------------------------------------------------------------------
 class Vecteur {
@@ -15,25 +16,59 @@ class Vecteur {
 
  //---------------------------------------------------------------------------------------Accesseurs
  public:
+ 
   unsigned getTaille(void) const { return taille_; }
 
-  complexe_t & operator[](unsigned i) {
-   if (i<taille_) return tableau_[i];
-   throw std::out_of_range("");
+/******************/
+
+  complexe_t & operator[](unsigned i) 
+  {
+	if (i<taille_) 
+	{
+	   return tableau_[i];
+	}
+
+	throw std::out_of_range("");
   }
 
-  const complexe_t & operator[](unsigned i) const {
-   if (i<taille_) return tableau_[i];
-   throw std::out_of_range("");
+/******************/
+
+  const complexe_t & operator[](unsigned i) const 
+  {
+	if (i<taille_)
+	{
+	    return tableau_[i];
+	}
+	
+	throw std::out_of_range("");
   }
+
+/******************/
+
+	complexe_t * begin() const
+	{
+		return tableau_;
+	}
+	
+/******************/
+
+	complexe_t * end() const
+	{
+		return tableau_ + taille_;
+	}
+	
+/******************/
 
  public:
   //-----------------------------------------------------------------------------Constructeur defaut
   explicit Vecteur(unsigned t = 10) : taille_(t),tableau_(new complexe_t[taille_]) {}
 
   //------------------------------------------------------------------------------Constructeur copie
-  Vecteur(const Vecteur & v) : taille_(v.taille_),tableau_(new complexe_t[taille_]) {
-   for (unsigned i = 0; i<taille_; ++i) tableau_[i]=v[i];
+  Vecteur(const Vecteur & v) : taille_(v.taille_),tableau_(new complexe_t[taille_]) 
+  {
+	  int i = 0;
+	std::for_each(v.begin(), v.end(), [&](complexe_t &){ tableau_[i]=v[i];i++;});
+   /*for (unsigned i = 0; i<taille_; ++i) tableau_[i]=v[i];*/
   }
 
   //-------------------------------------------------------------------------------------Destructeur
@@ -43,7 +78,8 @@ class Vecteur {
   Vecteur & operator=(const Vecteur & v) {
    if (this!=&v) {
     if (taille_!=v.taille_) throw std::length_error("");
-    for (unsigned i = 0; i<v.taille_; ++i) tableau_[i]=v[i];
+    int i = 0;
+	std::for_each(v.begin(), v.end(), [&](complexe_t &){ tableau_[i]=v[i];i++;});
    }
 
    return *this;
