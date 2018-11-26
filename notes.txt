@@ -1,0 +1,2 @@
+std::Array<MyType,4> docks = {elem1,elem2,elem3,elem4}; --> utiliser Array
+
